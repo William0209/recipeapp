@@ -32,6 +32,30 @@ export default function Recipes() {
       servings: 6,
       image: "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?auto=format&fit=crop&w=300&q=80",
     },
+    {
+      id: 4,
+      title: "Carbonara Pasta",
+      description: "A classic Italian pasta dish that's rich, creamy, and full of flavor.",
+      prepTime: "20 min",
+      servings: 4,
+      image: "https://images.unsplash.com/photo-1627207644206-a2040d60ecad?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: 5,
+      title: "Bolognese Pasta",
+      description: "A hearty and comforting pasta dish made with a rich tomato and meat sauce.",
+      prepTime: "30 min",
+      servings: 6,
+      image: "https://plus.unsplash.com/premium_photo-1677000666741-17c3c57139a2?auto=format&fit=crop&w=300&q=80",
+    },
+    {
+      id: 6,
+      title: "American Pancakes",
+      description: "Fluffy and delicious pancakes that are perfect for breakfast or brunch.",
+      prepTime: "15 min",
+      servings: 4,
+      image: " https://images.unsplash.com/photo-1506084868230-bb9d95c24759?auto=format&fit=crop&w=300&q=80",
+    },
   ];
 
   return (
