@@ -11,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const currentYear = new Date().getFullYear(); // Dynamically get the current year
+
   return (
     <html lang="en">
       <body className={`${inter.className} bg-green-50`}>
@@ -21,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           <main className="flex-grow z-10 relative flex justify-center items-start">{children}</main>
           <footer className="bg-white bg-opacity-80 backdrop-blur-sm py-4 text-center text-green-800 z-10 relative">
-            <p>&copy; 2023 Tasty Bytes. All rights reserved.</p>
+            <p>&copy; {currentYear} Tasty Bytes. All rights reserved.</p>
           </footer>
         </div>
       </body>

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function Recipes() {
   const recipes = [
@@ -93,7 +94,9 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full bg-green-600 hover:bg-green-700 text-white">View Recipe</Button>
+          <Link href={`/recipes/${recipe.id}`} className="w-full">
+            <Button className="w-full bg-green-600 hover:bg-green-700 text-white">View Recipe</Button>
+          </Link>
         </CardFooter>
       </Card>
     </motion.div>
