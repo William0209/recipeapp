@@ -77,14 +77,15 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
+      className="h-full"
     >
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden h-full flex flex-col">
         <img src={recipe.image} alt={recipe.title} className="w-full h-48 object-cover" />
-        <CardHeader>
+        <CardHeader className="flex-none">
           <CardTitle className="text-2xl text-green-800">{recipe.title}</CardTitle>
-          <CardDescription className="text-green-600">{recipe.description}</CardDescription>
+          <CardDescription className="text-green-600 line-clamp-2">{recipe.description}</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-grow">
           <div className="flex justify-between text-green-700">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-1" />
@@ -96,7 +97,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
             </div>
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex-none">
           <Link href={`/recipes/${recipe._id}`} className="w-full">
             <Button className="w-full bg-green-600 hover:bg-green-700 text-white">View Recipe</Button>
           </Link>
