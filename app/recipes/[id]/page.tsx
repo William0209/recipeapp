@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Clock, Users } from "lucide-react";
 import { PageTransition } from "@/components/page-transition";
 import { useEffect, useState } from "react";
+import Loader from "@/components/loader";
 
 interface Recipe {
   _id: string;
@@ -43,8 +44,8 @@ export default function RecipePage({ params }: { params: { id: string } }) {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-16 text-center">
-        <p className="text-green-800">Loading recipe...</p>
+      <div className="h-[calc(100vh-200px)] flex items-center justify-center">
+        <Loader />
       </div>
     );
   }

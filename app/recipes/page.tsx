@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import useSWR from 'swr';
+import Loader from "@/components/loader";
 
 interface Recipe {
   _id: string;
@@ -19,29 +20,33 @@ interface Recipe {
 }
 
 export default function Recipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchRecipes() {
-      try {
-        const response = await fetch("/api/recipes");
-        const data = await response.json();
-        setRecipes(data.recipes);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      } finally {
-        setLoading(false);
-      }
+  const { data, error, isLoading } = useSWR<{recipes: Recipe[]}>('/api/recipes', 
+    async (url) => {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    },
+    {
+      revalidateOnFocus: false,      // Don't revalidate when tab is focused
+      revalidateOnReconnect: false,  // Don't revalidate on reconnection
+      refreshInterval: 0,            // No automatic refresh
+      dedupingInterval: 3600000,     // Cache for 1 hour
+      errorRetryCount: 3,            // Still keep some error retries for reliability
     }
+  );
 
-    fetchRecipes();
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="h-[calc(100vh-200px)] flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
 
-  if (loading) {
+  if (error) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
-        <p className="text-green-800">Loading recipes...</p>
+        <p className="text-red-800">Error loading recipes</p>
       </div>
     );
   }
@@ -62,7 +67,7 @@ export default function Recipes() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, staggerChildren: 0.1 }}
       >
-        {recipes.map((recipe) => (
+        {data?.recipes.map((recipe) => (
           <RecipeCard key={recipe._id} recipe={recipe} />
         ))}
       </motion.div>
@@ -99,7 +104,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
         </CardContent>
         <CardFooter className="flex-none">
           <Link href={`/recipes/${recipe._id}`} className="w-full">
-            <Button className="w-full bg-green-600 hover:bg-green-700 text-white">View Recipe</Button>
+            <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-6">View Recipe</Button>
           </Link>
         </CardFooter>
       </Card>
