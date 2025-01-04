@@ -52,9 +52,9 @@ export default function Recipes() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="container mx-8 px-4 py-16">
       <motion.h1
-        className="text-4xl font-bold text-green-800 mb-8 text-center"
+        className="text-4xl font-bold text-green-800 mb-14 text-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -62,7 +62,7 @@ export default function Recipes() {
         Our Recipes
       </motion.h1>
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, staggerChildren: 0.1 }}
@@ -80,7 +80,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.95 }}
       className="h-full"
     >
