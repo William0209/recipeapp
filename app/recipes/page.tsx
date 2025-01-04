@@ -1,12 +1,21 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import useSWR from 'swr';
+import useSWR from "swr";
 import Loader from "@/components/loader";
+import Pagination from "@/components/pagination";
 
 interface Recipe {
   _id: string;
@@ -20,20 +29,30 @@ interface Recipe {
 }
 
 export default function Recipes() {
-  const { data, error, isLoading } = useSWR<{recipes: Recipe[]}>('/api/recipes', 
+  const [currentPage, setCurrentPage] = useState(1);
+  const recipesPerPage = 6; // Show 6 recipes per page
+
+  const { data, error, isLoading } = useSWR<{ recipes: Recipe[] }>(
+    "/api/recipes",
     async (url) => {
       const response = await fetch(url);
       const data = await response.json();
       return data;
     },
     {
-      revalidateOnFocus: false,      // Don't revalidate when tab is focused
-      revalidateOnReconnect: false,  // Don't revalidate on reconnection
-      refreshInterval: 0,            // No automatic refresh
-      dedupingInterval: 3600000,     // Cache for 1 hour
-      errorRetryCount: 3,            // Still keep some error retries for reliability
+      revalidateOnFocus: false, // Don't revalidate when tab is focused
+      revalidateOnReconnect: false, // Don't revalidate on reconnection
+      refreshInterval: 0, // No automatic refresh
+      dedupingInterval: 3600000, // Cache for 1 hour
+      errorRetryCount: 3, // Still keep some error retries for reliability
     }
   );
+
+  // Calculate pagination values
+  const totalPages = data ? Math.ceil(data.recipes.length / recipesPerPage) : 0;
+  const startIndex = (currentPage - 1) * recipesPerPage;
+  const endIndex = startIndex + recipesPerPage;
+  const currentRecipes = data?.recipes.slice(startIndex, endIndex);
 
   if (isLoading) {
     return (
@@ -67,10 +86,18 @@ export default function Recipes() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, staggerChildren: 0.1 }}
       >
-        {data?.recipes.map((recipe) => (
+        {currentRecipes?.map((recipe) => (
           <RecipeCard key={recipe._id} recipe={recipe} />
         ))}
       </motion.div>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }
@@ -85,10 +112,20 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
       className="h-full"
     >
       <Card className="overflow-hidden h-full flex flex-col">
-        <img src={recipe.image} alt={recipe.title} className="w-full h-48 object-cover" />
+        <div className="relative pt-[56.25%]">
+          <img
+            src={recipe.image}
+            alt={recipe.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
         <CardHeader className="flex-none">
-          <CardTitle className="text-2xl text-green-800">{recipe.title}</CardTitle>
-          <CardDescription className="text-green-600 line-clamp-2">{recipe.description}</CardDescription>
+          <CardTitle className="text-2xl text-green-800">
+            {recipe.title}
+          </CardTitle>
+          <CardDescription className="text-green-600 line-clamp-2">
+            {recipe.description}
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex-grow">
           <div className="flex justify-between text-green-700">
@@ -104,7 +141,9 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
         </CardContent>
         <CardFooter className="flex-none">
           <Link href={`/recipes/${recipe._id}`} className="w-full">
-            <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-6">View Recipe</Button>
+            <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-6">
+              View Recipe
+            </Button>
           </Link>
         </CardFooter>
       </Card>
