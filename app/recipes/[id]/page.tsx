@@ -58,7 +58,13 @@ export default function RecipePage({ params }: { params: { id: string } }) {
     <PageTransition>
       <div className="container mx-auto px-4 py-16">
         <Card className="overflow-hidden max-w-3xl mx-auto">
-          <img src={recipe.image} alt={recipe.title} className="w-full h-64 object-cover" />
+          <div className="relative pt-[50%]">
+            <img 
+              src={recipe.image} 
+              alt={recipe.title} 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
           <CardHeader>
             <CardTitle className="text-3xl text-green-800">{recipe.title}</CardTitle>
             <CardDescription className="text-green-600">{recipe.description}</CardDescription>
